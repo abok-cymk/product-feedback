@@ -35,4 +35,19 @@ final class InMemoryProductRepository implements ProductRepository
 
         return null;
     }
+
+        public function save(Product $product): Product
+    {
+        foreach ($this->products as $index => $existingProduct) {
+            if ($existingProduct->id() === $product->id()) {
+                $this->products[$index] = $product;
+
+                return $product;
+            }
+        }
+
+        $this->products[] = $product;
+
+        return $product;
+    }
 }

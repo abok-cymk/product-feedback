@@ -17,4 +17,7 @@ interface ProductRepository
      * Returns null when the product does not exist.
      */
     public function findById(int $id): ?Product;
+
+
+    public function save(Product $product): Product;
 }
