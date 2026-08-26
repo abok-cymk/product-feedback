@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Application\Product\ListProducts;
+use App\Domain\ProductRepository;
+use App\Infrastructure\InMemoryProductRepository;
 use App\Presentation\ExceptionHandler;
 use App\Presentation\HealthController;
+use App\Presentation\Product\ProductController;
 use App\Presentation\Response;
 use App\Presentation\Router;
 
@@ -39,5 +43,19 @@ final class Application
             '/api/health',
             new HealthController(),
         );
+
+        $productRepository = $this->createProductRepository();
+
+        $this->router->get(
+            '/api/products',
+            new ProductController(
+                new ListProducts($productRepository),
+            )->index(...),
+        );
+    }
+
+    private function createProductRepository(): ProductRepository
+    {
+        return new InMemoryProductRepository();
     }
 }
