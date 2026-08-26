@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Application\Product\ListProducts;
-use App\Domain\ProductRepository;
-use App\Infrastructure\InMemoryProductRepository;
+use App\Infrastructure\DatabaseConnection;
+use App\Infrastructure\PostgresProductRepository;
 use App\Presentation\ExceptionHandler;
 use App\Presentation\HealthController;
 use App\Presentation\Product\ProductController;
@@ -54,8 +54,12 @@ final class Application
         );
     }
 
-    private function createProductRepository(): ProductRepository
-    {
-        return new InMemoryProductRepository();
-    }
+   private function createProductRepository(): PostgresProductRepository
+{
+    $config = Config::fromEnvironment();
+
+    $connection = new DatabaseConnection($config)->connect();
+
+    return new PostgresProductRepository($connection);
+}
 }
