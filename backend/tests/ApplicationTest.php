@@ -21,4 +21,18 @@ final class ApplicationTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
     }
+
+    public function test_products_route_is_registered(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'GET',
+            '/api/products',
+        );
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame(200, $response->statusCode());
+        self::assertSame([], $response->data());
+    }
 }
