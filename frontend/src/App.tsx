@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import { useAppNavigation } from "./lib/navigation"
 import { Breadcrumbs } from "./components/Breadcrumbs"
 import { ErrorBoundary } from "./components/ErrorBoundary"
+import { ProductError } from "./features/products/components/ProductError"
 
 function HomePage() {
   const { navigateTo, isPending } = useAppNavigation()
@@ -39,7 +40,7 @@ function ProductsPage() {
     <main className="mx-auto max-w-6xl px-6 py-10 sm:px-3 sm:py-5 md:px-4 md:py-4 lg:px-0 lg:py-3">
       <h1>Products</h1>
       <Breadcrumbs />
-      <ErrorBoundary fallback={<p>Unable to load products.</p>}>
+      <ErrorBoundary fallback={<ProductError />}>
         <Suspense fallback={<ProductListSkeleton />}>
           <ProductsContent />
         </Suspense>
