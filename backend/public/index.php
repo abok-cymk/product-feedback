@@ -43,6 +43,7 @@ if ($method === 'POST') {
 $response = (new Application())->handle(
     $_SERVER['REQUEST_METHOD'],
     parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/',
+    $request,
 );
 
 foreach ($cors->headers($origin) as $name => $value) {

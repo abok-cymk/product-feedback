@@ -1,20 +1,65 @@
-import { Button } from "@/components/ui/button"
+import { Link, Route, Routes } from "react-router"
+import { useProducts } from "./features/products/queries/product"
+
+function HomePage() {
+  return (
+    <main>
+      <h1>Product Feedback</h1>
+
+      <Link to="/products">Products</Link>
+    </main>
+  )
+}
+
+function ProductsPage() {
+  const { data: products, isPending, isError } = useProducts()
+
+  if (isPending) {
+    return (
+      <main>
+        <h1>Products</h1>
+        <p>Loading products...</p>
+      </main>
+    )
+  }
+
+  if (isError) {
+    return (
+      <main>
+        <h1>Products</h1>
+        <p>Unable to load products.</p>
+      </main>
+    )
+  }
+
+  return (
+    <main>
+      <h1>Products</h1>
+      {products.length === 0 ? (
+        <p>No products found.</p>
+      ) : (
+        <ul>
+          {products.map((product) => (
+            <li key={product.id}>
+              <h2>{product.name}</h2>
+              <p>{product.description}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <Link to="/">Home</Link>
+      <Link to="/">Home</Link>
+    </main>
+  )
+}
 
 export function App() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/products" element={<ProductsPage />} />
+    </Routes>
   )
 }
 
