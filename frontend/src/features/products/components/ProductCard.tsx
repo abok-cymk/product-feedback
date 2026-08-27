@@ -3,7 +3,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import type { Product } from "../product";
 
@@ -15,7 +14,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{product.name}</CardTitle>
+        <h2>{product.name}</h2>
         <CardDescription>Product #{product.id}</CardDescription>
       </CardHeader>
 
