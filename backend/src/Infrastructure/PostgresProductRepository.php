@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Domain\Product;
+use App\Domain\ProductData;
 use App\Domain\ProductRepository;
 use PDO;
 
@@ -55,23 +56,28 @@ final readonly class PostgresProductRepository implements ProductRepository
         return $this->mapRowToProduct($row);
     }
 
-    public function save(Product $product): Product
+    public function create(ProductData $data): Product
     {
         $statement = $this->connection->prepare(
-            'INSERT INTO products (id, name, description)
-         VALUES (:id, :name, :description)
-         ON CONFLICT (id) DO UPDATE SET
-             name = EXCLUDED.name,
-             description = EXCLUDED.description',
+            'INSERT INTO products (name, description)
+         VALUES (:name, :description)
+         RETURNING id, name, description',
         );
 
         $statement->execute([
-            'id' => $product->id(),
-            'name' => $product->name(),
-            'description' => $product->description(),
+            'name' => $data->name(),
+            'description' => $data->description(),
         ]);
 
-        return $product;
+        $row = $statement->fetch();
+
+        if ($row === false) {
+            throw new \RuntimeException(
+                'Failed to create product.',
+            );
+        }
+
+        return $this->mapRowToProduct($row);
     }
 
     /**

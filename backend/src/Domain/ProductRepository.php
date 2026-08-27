@@ -18,6 +18,8 @@ interface ProductRepository
      */
     public function findById(int $id): ?Product;
 
-
-    public function save(Product $product): Product;
+    /**
+     * Persist a new product and return it with its generated ID.
+     */
+    public function create(ProductData $data): Product;
 }
