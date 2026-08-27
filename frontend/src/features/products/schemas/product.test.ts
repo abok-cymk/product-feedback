@@ -24,7 +24,7 @@ describe("productSchema", () => {
   })
 
   it("rejects a product missing a name", () => {
-    const { name, ...rest } = validProduct
+    const { name: _name, ...rest } = validProduct
     expect(() => productSchema.parse(rest)).toThrow()
   })
 })
@@ -57,8 +57,6 @@ describe("productsResponseSchema", () => {
   })
 
   it("rejects a wrapped single product instead of an array", () => {
-    expect(() =>
-      productsResponseSchema.parse({ data: validProduct })
-    ).toThrow()
+    expect(() => productsResponseSchema.parse({ data: validProduct })).toThrow()
   })
 })

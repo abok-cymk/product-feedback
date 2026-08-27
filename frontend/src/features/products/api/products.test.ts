@@ -75,9 +75,11 @@ describe("getProducts", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
-          id: 2,
-          name: "New product",
-          description: "New product description.",
+          data: {
+            id: 2,
+            name: "New product",
+            description: "New product description.",
+          },
         }),
         {
           status: 201,

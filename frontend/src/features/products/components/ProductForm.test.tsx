@@ -11,20 +11,17 @@ describe("ProductForm", () => {
 
     render(<ProductForm onSubmit={onSubmit} />)
 
-    await user.type(
-      screen.getByLabelText("Name"),
-      "New product",
-    )
+    await user.type(screen.getByLabelText("Name"), "New product")
 
     await user.type(
       screen.getByLabelText("Description"),
-      "New product description.",
+      "New product description."
     )
 
     await user.click(
       screen.getByRole("button", {
         name: "Create product",
-      }),
+      })
     )
 
     expect(onSubmit).toHaveBeenCalledWith({
@@ -42,7 +39,7 @@ describe("ProductForm", () => {
     await user.click(
       screen.getByRole("button", {
         name: "Create product",
-      }),
+      })
     )
 
     expect(onSubmit).not.toHaveBeenCalled()

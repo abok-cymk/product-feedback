@@ -3,12 +3,12 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-} from "@/components/ui/card";
-import type { Product } from "../schemas/product";
+} from "@/components/ui/card"
+import type { Product } from "../schemas/product"
 
 type ProductCardProps = {
-  product: Product;
-};
+  product: Product
+}
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
@@ -19,10 +19,8 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
 
       <CardContent>
-        <p className="text-sm text-muted-foreground">
-          {product.description}
-        </p>
+        <p className="text-sm text-muted-foreground">{product.description}</p>
       </CardContent>
     </Card>
-  );
+  )
 }

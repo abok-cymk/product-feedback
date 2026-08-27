@@ -17,9 +17,7 @@ function createTestQueryClient() {
 
 function renderWithProvider(ui: React.ReactElement, queryClient: QueryClient) {
   return render(
-    <QueryClientProvider client={queryClient}>
-      {ui}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
   )
 }
 
@@ -58,7 +56,7 @@ describe("useProducts", () => {
   it("creates a product and invalidates the products list", async () => {
     const queryClient = createTestQueryClient()
     const invalidateQueriesSpy = vi.spyOn(queryClient, "invalidateQueries")
-    
+
     const createdProduct = {
       id: 3,
       name: "New product",

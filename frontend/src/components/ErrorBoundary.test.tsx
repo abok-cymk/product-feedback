@@ -24,11 +24,9 @@ describe("ErrorBoundary", () => {
     render(
       <ErrorBoundary fallback={<p>Something went wrong.</p>}>
         <BrokenComponent />
-      </ErrorBoundary>,
+      </ErrorBoundary>
     )
-    
-    expect(
-      screen.getByText("Something went wrong."),
-    ).toBeInTheDocument()
+
+    expect(screen.getByText("Something went wrong.")).toBeInTheDocument()
   })
 })

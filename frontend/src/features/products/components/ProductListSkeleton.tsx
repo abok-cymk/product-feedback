@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
-const SKELETON_COUNT = 6;
+const SKELETON_COUNT = 6
 
 export function ProductListSkeleton() {
   return (
@@ -20,5 +20,5 @@ export function ProductListSkeleton() {
         </Card>
       ))}
     </div>
-  );
+  )
 }

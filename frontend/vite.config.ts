@@ -1,21 +1,21 @@
-import { fileURLToPath } from "node:url";
-import path from "node:path";
+import { fileURLToPath } from "node:url"
+import path from "node:path"
 
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
+import tailwindcss from "@tailwindcss/vite"
+import react from "@vitejs/plugin-react"
+import { defineConfig } from "vitest/config"
 
-const srcPath = fileURLToPath(new URL("./src", import.meta.url));
+const srcPath = fileURLToPath(new URL("./src", import.meta.url))
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   resolve: {
     alias: {
-       "@": path.resolve(srcPath),
+      "@": path.resolve(srcPath),
     },
   },
-   test: {
+  test: {
     environment: "jsdom",
     globals: true,
     setupFiles: "./src/test/setup.ts",
@@ -28,4 +28,4 @@ export default defineConfig({
       },
     },
   },
-});
+})
