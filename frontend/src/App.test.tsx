@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router"
 import { describe, expect, it, beforeEach, vi } from "vitest"
 
@@ -13,7 +13,7 @@ const mockProducts = {
       description: "First product description.",
     },
   ],
-};
+}
 
 function renderApp(initialEntry: string) {
   const queryClient = new QueryClient({
@@ -70,5 +70,42 @@ describe("App", () => {
         })
       ).toBeInTheDocument()
     })
+  })
+
+  it("navigates to the products page", async () => {
+    renderApp("/")
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Products",
+      })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", {
+          name: "Products",
+        })
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("renders the error fallback when products fail to load", async () => {
+    globalThis.fetch = vi.fn().mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        status: 500,
+        json: () =>
+          Promise.resolve({
+            error: "Internal Server Error",
+          }),
+      })
+    ) as any
+
+    renderApp("/products")
+
+    expect(
+      await screen.findByText("Unable to load products.")
+    ).toBeInTheDocument()
   })
 })
