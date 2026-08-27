@@ -1,11 +1,11 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest"
 
-import { getProducts } from "./products";
+import { createProduct, getProducts } from "./products"
 
 describe("getProducts", () => {
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
+    vi.restoreAllMocks()
+  })
 
   it("returns validated products from the API", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -24,9 +24,9 @@ describe("getProducts", () => {
           headers: {
             "Content-Type": "application/json",
           },
-        },
-      ),
-    );
+        }
+      )
+    )
 
     await expect(getProducts()).resolves.toEqual([
       {
@@ -34,7 +34,7 @@ describe("getProducts", () => {
         name: "First product",
         description: "First product description.",
       },
-    ]);
+    ])
 
     expect(fetch).toHaveBeenCalledWith(
       "/api/products",
@@ -43,9 +43,9 @@ describe("getProducts", () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         }),
-      }),
-    );
-  });
+      })
+    )
+  })
 
   it("rejects an invalid API response", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -64,10 +64,54 @@ describe("getProducts", () => {
           headers: {
             "Content-Type": "application/json",
           },
-        },
-      ),
-    );
+        }
+      )
+    )
 
-    await expect(getProducts()).rejects.toThrow();
-  });
-});
+    await expect(getProducts()).rejects.toThrow()
+  })
+
+  it("creates a product through the API", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          id: 2,
+          name: "New product",
+          description: "New product description.",
+        }),
+        {
+          status: 201,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    )
+
+    await expect(
+      createProduct({
+        name: "New product",
+        description: "New product description.",
+      })
+    ).resolves.toEqual({
+      id: 2,
+      name: "New product",
+      description: "New product description.",
+    })
+
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/products",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({
+          name: "New product",
+          description: "New product description.",
+        }),
+        headers: expect.objectContaining({
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }),
+      })
+    )
+  })
+})

@@ -1,6 +1,6 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
-import { getProducts } from "../api/products";
+import { createProduct, getProducts, type CreateProductInput } from "../api/products";
 
 export const productKeys = {
   all: ["products"] as const,
@@ -12,4 +12,18 @@ export function useProducts() {
     queryKey: productKeys.lists(),
     queryFn: getProducts,
   });
+}
+
+export function useCreateProduct() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (input: CreateProductInput) => createProduct(input),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: productKeys.lists(),
+      })
+    },
+  })
 }
