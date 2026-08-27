@@ -14,7 +14,7 @@ function renderBreadcrumbs(initialPath: string) {
 describe("Breadcrumbs Component", () => {
   it("renders absolutely nothing when on the homepage root", () => {
     const { container } = renderBreadcrumbs("/")
-    
+
     expect(container.firstChild).toBeNull()
   })
 
@@ -27,7 +27,7 @@ describe("Breadcrumbs Component", () => {
 
     const activeSegment = screen.getByText("Products")
     expect(activeSegment).toBeInTheDocument()
-    expect(activeSegment.tagName).toBe("SPAN") 
+    expect(activeSegment.tagName).toBe("SPAN")
   })
 
   it("converts intermediate path segments into links when nested deeper", () => {

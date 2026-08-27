@@ -1,9 +1,9 @@
-import type { Product } from "../schemas/product";
-import { ProductCard } from "./ProductCard";
+import type { Product } from "../schemas/product"
+import { ProductCard } from "./ProductCard"
 
 type ProductListProps = {
-  products: Product[];
-};
+  products: Product[]
+}
 
 export function ProductList({ products }: ProductListProps) {
   return (
@@ -12,5 +12,5 @@ export function ProductList({ products }: ProductListProps) {
         <ProductCard key={product.id} product={product} />
       ))}
     </div>
-  );
+  )
 }

@@ -1,13 +1,17 @@
-import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-export type ProductFormValues = {
-  name: string
-  description: string
-}
+const productFormSchema = z.object({
+  name: z.string().trim().min(1, "Name is required"),
+  description: z.string().trim().min(1, "Description is required"),
+})
+
+export type ProductFormValues = z.infer<typeof productFormSchema>
 
 type ProductFormProps = {
   onSubmit?: (values: ProductFormValues) => void
@@ -15,35 +19,37 @@ type ProductFormProps = {
 }
 
 export function ProductForm({ onSubmit, isSubmitting }: ProductFormProps) {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductFormValues>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  })
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const values = {
-      name: name.trim(),
-      description: description.trim(),
-    }
-
-    if (!values.name || !values.description) {
-      return
-    }
-
+  function handleValidSubmit(values: ProductFormValues) {
     onSubmit?.(values)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(handleValidSubmit)} className="space-y-4">
       <div className="space-y-2">
         <label htmlFor="product-name">Name</label>
 
         <Input
           id="product-name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
           placeholder="Product name"
+          aria-invalid={errors.name ? "true" : "false"}
+          {...register("name")}
         />
+
+        {errors.name && (
+          <p className="text-xs text-destructive">{errors.name.message}</p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -51,10 +57,16 @@ export function ProductForm({ onSubmit, isSubmitting }: ProductFormProps) {
 
         <Textarea
           id="product-description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
           placeholder="Product description"
+          aria-invalid={errors.description ? "true" : "false"}
+          {...register("description")}
         />
+
+        {errors.description && (
+          <p className="text-xs text-destructive">
+            {errors.description.message}
+          </p>
+        )}
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

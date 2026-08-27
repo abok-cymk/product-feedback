@@ -1,18 +1,18 @@
-import { useTransition } from "react";
-import { useNavigate } from "react-router";
+import { useTransition } from "react"
+import { useNavigate } from "react-router"
 
 export function useAppNavigation() {
-  const [isPending, startTransition] = useTransition();
-  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition()
+  const navigate = useNavigate()
 
   function navigateTo(to: string) {
     startTransition(() => {
-      navigate(to);
-    });
+      navigate(to)
+    })
   }
 
   return {
     isPending,
     navigateTo,
-  };
+  }
 }

@@ -44,22 +44,28 @@ async function fillAndSubmit() {
 
 describe("ProductFormDialog", () => {
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   it("shows only a success toast when the mutation succeeds", async () => {
-    setup({
-      mutateImpl: (_values, opts) => opts?.onSuccess?.(),
+    const { mutate } = setup({
+      mutateImpl: (_values, opts) => opts?.onError?.(new Error("boom")),
     })
 
     await fillAndSubmit()
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith("Product added!")
+      expect(mutate).toHaveBeenCalled()
     })
 
-    expect(toast.error).not.toHaveBeenCalled()
-    expect(toast.success).toHaveBeenCalledTimes(1)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        "Failed to create product. Please try again."
+      )
+    })
+
+    expect(toast.success).not.toHaveBeenCalled()
+    expect(toast.error).toHaveBeenCalledTimes(1)
   })
 
   it("shows only an error toast when the mutation fails", async () => {

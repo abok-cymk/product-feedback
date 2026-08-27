@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
 
-import { ProductList } from "./ProductList";
-import type { Product } from "../schemas/product";
+import { ProductList } from "./ProductList"
+import type { Product } from "../schemas/product"
 
 const products: Product[] = [
   {
@@ -20,22 +20,22 @@ const products: Product[] = [
     name: "Third product",
     description: "Third product description.",
   },
-];
+]
 
 describe("ProductList", () => {
   it("renders every product", () => {
-    render(<ProductList products={products} />);
+    render(<ProductList products={products} />)
 
     expect(
-      screen.getByRole("heading", { name: "First product" }),
-    ).toBeInTheDocument();
+      screen.getByRole("heading", { name: "First product" })
+    ).toBeInTheDocument()
 
     expect(
-      screen.getByRole("heading", { name: "Second product" }),
-    ).toBeInTheDocument();
+      screen.getByRole("heading", { name: "Second product" })
+    ).toBeInTheDocument()
 
     expect(
-      screen.getByRole("heading", { name: "Third product" }),
-    ).toBeInTheDocument();
-  });
-});
+      screen.getByRole("heading", { name: "Third product" })
+    ).toBeInTheDocument()
+  })
+})
