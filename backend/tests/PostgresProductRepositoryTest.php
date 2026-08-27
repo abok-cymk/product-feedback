@@ -6,6 +6,7 @@ namespace Tests;
 
 use App\Config;
 use App\Domain\Product;
+use App\Domain\ProductData;
 use App\Infrastructure\DatabaseConnection;
 use App\Infrastructure\PostgresProductRepository;
 use PDO;
@@ -94,48 +95,48 @@ final class PostgresProductRepositoryTest extends TestCase
         );
     }
 
-    public function test_it_saves_a_new_product(): void
+    public function test_it_creates_a_new_product_with_a_database_generated_id(): void
     {
-        $product = new Product(
-            1,
+        $data = new ProductData(
             'Add dark mode',
             'Allow users to switch the application to a dark color scheme.',
         );
 
-        $savedProduct = $this->repository->save($product);
+        $product = $this->repository->create($data);
 
-        self::assertSame($product, $savedProduct);
-
-        self::assertEquals(
-            $product,
-            $this->repository->findById(1),
+        self::assertGreaterThan(0, $product->id());
+        self::assertSame('Add dark mode', $product->name());
+        self::assertSame(
+            'Allow users to switch the application to a dark color scheme.',
+            $product->description(),
         );
+
+        $found = $this->repository->findById($product->id());
+
+        self::assertNotNull($found);
+        self::assertSame($product->id(), $found->id());
+        self::assertSame($product->name(), $found->name());
+        self::assertSame($product->description(), $found->description());
     }
 
-    public function test_it_updates_an_existing_product(): void
+    public function test_it_generates_unique_ids_for_new_products(): void
     {
-        $this->connection->exec(
-            "INSERT INTO products (id, name, description)
-         VALUES (
-             1,
-             'Add dark mode',
-             'Allow users to switch the application to a dark color scheme.'
-         )",
+        $first = $this->repository->create(
+            new ProductData(
+                'First product',
+                'First product description.',
+            ),
         );
 
-        $updatedProduct = new Product(
-            1,
-            'Export feedback',
-            'Allow administrators to export product feedback.',
+        $second = $this->repository->create(
+            new ProductData(
+                'Second product',
+                'Second product description.',
+            ),
         );
 
-        $savedProduct = $this->repository->save($updatedProduct);
-
-        self::assertSame($updatedProduct, $savedProduct);
-
-        self::assertEquals(
-            $updatedProduct,
-            $this->repository->findById(1),
-        );
+        self::assertGreaterThan(0, $first->id());
+        self::assertGreaterThan(0, $second->id());
+        self::assertNotSame($first->id(), $second->id());
     }
 }

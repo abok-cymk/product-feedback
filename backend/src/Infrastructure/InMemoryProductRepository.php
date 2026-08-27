@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Domain\Product;
+use App\Domain\ProductData;
 use App\Domain\ProductRepository;
 
 final class InMemoryProductRepository implements ProductRepository
@@ -14,8 +15,9 @@ final class InMemoryProductRepository implements ProductRepository
      */
     public function __construct(
         private array $products = [],
-    ) {
-    }
+    ) {}
+
+    private int $nextId = 1;
 
     /**
      * @return list<Product>
@@ -36,15 +38,17 @@ final class InMemoryProductRepository implements ProductRepository
         return null;
     }
 
-        public function save(Product $product): Product
+    public function create(ProductData $data): Product
     {
-        foreach ($this->products as $index => $existingProduct) {
-            if ($existingProduct->id() === $product->id()) {
-                $this->products[$index] = $product;
+        // The in-memory repository needs to simulate PostgreSQL's generated ID
+        // so application tests can exercise the same repository contract.
+        $id = $this->nextId++;
 
-                return $product;
-            }
-        }
+        $product = new Product(
+            $id,
+            $data->name(),
+            $data->description(),
+        );
 
         $this->products[] = $product;
 

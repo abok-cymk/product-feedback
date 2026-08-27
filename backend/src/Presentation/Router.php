@@ -8,7 +8,9 @@ use RuntimeException;
 
 final class Router
 {
-    /** @var array<string, callable> */
+    /**
+     * @var array<string, callable(Request): Response>
+     */
     private array $routes = [];
 
     public function get(string $path, callable $handler): void
@@ -16,7 +18,12 @@ final class Router
         $this->routes['GET ' . $path] = $handler;
     }
 
-    public function dispatch(string $method, string $path): Response
+    public function post(string $path, callable $handler): void
+    {
+        $this->routes['POST ' . $path] = $handler;
+    }
+
+    public function dispatch(string $method, string $path, Request $request): Response
     {
         $route = $this->routes[$method . ' ' . $path] ?? null;
 
@@ -24,6 +31,6 @@ final class Router
             throw new RuntimeException('Route not found.');
         }
 
-        return $route();
+        return $route($request);
     }
 }
