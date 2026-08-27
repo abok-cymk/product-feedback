@@ -25,9 +25,9 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       description: description.trim(),
     }
 
-    if (!values.name || !values.description) {
+  if (!values.name || !values.description) {
       return
-    }
+  }
 
     onSubmit?.(values)
   }
