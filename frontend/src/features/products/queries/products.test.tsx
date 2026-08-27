@@ -101,3 +101,54 @@ describe("useProducts", () => {
     })
   })
 })
+
+describe("useCreateProduct (integration with real createProduct)", () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it("resolves with the created product from a wrapped API response", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: {
+            id: 4,
+            name: "Integration product",
+            description: "Created via real fetch mock.",
+          },
+        }),
+        {
+          status: 201,
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+    )
+
+    const queryClient = createTestQueryClient()
+
+    function MutationTestComponent() {
+      const mutation = useCreateProduct()
+      return (
+        <div>
+          <button
+            onClick={() =>
+              mutation.mutate({
+                name: "Integration product",
+                description: "Created via real fetch mock.",
+              })
+            }
+          >
+            Create product
+          </button>
+          {mutation.isSuccess && <p>Created!</p>}
+        </div>
+      )
+    }
+
+    renderWithProvider(<MutationTestComponent />, queryClient)
+
+    screen.getByRole("button", { name: "Create product" }).click()
+
+    expect(await screen.findByText("Created!")).toBeInTheDocument()
+  })
+})

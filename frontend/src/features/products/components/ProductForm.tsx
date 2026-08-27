@@ -11,9 +11,10 @@ export type ProductFormValues = {
 
 type ProductFormProps = {
   onSubmit?: (values: ProductFormValues) => void
+  isSubmitting?: boolean
 }
 
-export function ProductForm({ onSubmit }: ProductFormProps) {
+export function ProductForm({ onSubmit, isSubmitting }: ProductFormProps) {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
 
@@ -25,9 +26,9 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       description: description.trim(),
     }
 
-  if (!values.name || !values.description) {
+    if (!values.name || !values.description) {
       return
-  }
+    }
 
     onSubmit?.(values)
   }
@@ -56,8 +57,8 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
         />
       </div>
 
-      <Button type="submit">
-        Create product
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Creating…" : "Create product"}
       </Button>
     </form>
   )
