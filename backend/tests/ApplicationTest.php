@@ -118,4 +118,119 @@ final class ApplicationTest extends TestCase
             $listResponse->data(),
         );
     }
+
+    public function test_it_returns_bad_request_when_product_name_is_missing(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'POST',
+            '/api/products',
+            new Request([
+                'description' => 'Allow users to switch the application to a dark color scheme.',
+            ]),
+        );
+
+        self::assertSame(400, $response->statusCode());
+        self::assertSame(
+            [
+                'error' => [
+                    'message' => 'Request field "name" must be a string.',
+                ],
+            ],
+            $response->data(),
+        );
+    }
+
+    public function test_it_returns_bad_request_when_product_name_is_not_a_string(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'POST',
+            '/api/products',
+            new Request([
+                'name' => 123,
+                'description' => 'Allow users to switch the application to a dark color scheme.',
+            ]),
+        );
+
+        self::assertSame(400, $response->statusCode());
+        self::assertSame(
+            [
+                'error' => [
+                    'message' => 'Request field "name" must be a string.',
+                ],
+            ],
+            $response->data(),
+        );
+    }
+
+    public function test_it_returns_bad_request_when_product_name_is_empty(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'POST',
+            '/api/products',
+            new Request([
+                'name' => '   ',
+                'description' => 'Allow users to switch the application to a dark color scheme.',
+            ]),
+        );
+
+        self::assertSame(400, $response->statusCode());
+        self::assertSame(
+            [
+                'error' => [
+                    'message' => 'Product name cannot be empty.',
+                ],
+            ],
+            $response->data(),
+        );
+    }
+
+    public function test_it_returns_bad_request_when_product_description_is_empty(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'POST',
+            '/api/products',
+            new Request([
+                'name' => 'Add dark mode',
+                'description' => '   ',
+            ]),
+        );
+
+        self::assertSame(400, $response->statusCode());
+        self::assertSame(
+            [
+                'error' => [
+                    'message' => 'Product description cannot be empty.',
+                ],
+            ],
+            $response->data(),
+        );
+    }
+
+    public function test_it_returns_not_found_for_an_unknown_route(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'GET',
+            '/api/does-not-exist',
+        );
+
+        self::assertSame(404, $response->statusCode());
+        self::assertSame(
+            [
+                'error' => [
+                    'message' => 'Route not found.',
+                ],
+            ],
+            $response->data(),
+        );
+    }
 }
