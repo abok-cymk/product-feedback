@@ -91,21 +91,27 @@ describe("App", () => {
   })
 
   it("renders the error fallback when products fail to load", async () => {
-    globalThis.fetch = vi.fn().mockImplementation(() =>
-      Promise.resolve({
-        ok: false,
-        status: 500,
-        json: () =>
-          Promise.resolve({
-            error: "Internal Server Error",
-          }),
-      })
-    ) as any
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
-    renderApp("/products")
+    try {
+      globalThis.fetch = vi.fn().mockImplementation(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+          json: () =>
+            Promise.resolve({
+              error: "Internal Server Error",
+            }),
+        })
+      ) as any
 
-    expect(
-      await screen.findByText("Unable to load products.")
-    ).toBeInTheDocument()
+      renderApp("/products")
+
+      expect(
+        await screen.findByText("Unable to load products.")
+      ).toBeInTheDocument()
+    } finally {
+      consoleSpy.mockRestore()
+    }
   })
 })
