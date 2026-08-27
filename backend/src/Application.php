@@ -33,6 +33,13 @@ final class Application
         string $path,
         Request $request = new Request(),
     ): Response {
+        if ($method === 'OPTIONS') {
+            return new Response(
+                data: [],
+                statusCode: 204,
+            );
+        }
+        
         try {
             return $this->router->dispatch($method, $path, $request);
         } catch (\Throwable $exception) {

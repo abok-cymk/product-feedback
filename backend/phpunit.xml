@@ -5,6 +5,10 @@
     colors="true"
     cacheDirectory=".phpunit.cache"
 >
+    <php>
+        <env name="APP_CORS_ORIGIN" value="http://localhost:5173" />
+    </php>
+    
     <testsuites>
         <testsuite name="Application">
             <directory>tests</directory>

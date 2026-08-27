@@ -10,6 +10,7 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - APP_CORS_ORIGIN=${APP_CORS_ORIGIN}
     volumes:
       - .:/var/www:rw
     depends_on:

@@ -47,4 +47,21 @@ final class RequestTest extends TestCase
 
         $request->string('name');
     }
+
+    public function test_it_creates_a_request_from_a_json_body(): void
+    {
+        $request = Request::fromJson(
+            '{"name":"API integration test","description":"Created through the HTTP API."}',
+        );
+
+        self::assertSame(
+            'API integration test',
+            $request->string('name'),
+        );
+
+        self::assertSame(
+            'Created through the HTTP API.',
+            $request->string('description'),
+        );
+    }
 }
