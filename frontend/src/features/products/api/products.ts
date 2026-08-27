@@ -1,5 +1,5 @@
 import { apiFetch } from "../../../lib/api";
-import { productsResponseSchema, type Product } from "../product.ts";
+import { productsResponseSchema, type Product } from "../schemas/product.ts";
 
 export async function getProducts(): Promise<Product[]> {
   const response = await apiFetch(

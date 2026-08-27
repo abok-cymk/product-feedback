@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import type { Product } from "../product";
+import type { Product } from "../schemas/product";
 
 type ProductCardProps = {
   product: Product;
