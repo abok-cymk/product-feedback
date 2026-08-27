@@ -14,6 +14,7 @@ final readonly class Config
         public string $dbDatabase,
         public string $dbUsername,
         public string $dbPassword,
+        public string $corsOrigin,
     ) {
     }
 
@@ -25,6 +26,7 @@ final readonly class Config
             dbDatabase: self::required('DB_DATABASE'),
             dbUsername: self::required('DB_USERNAME'),
             dbPassword: self::required('DB_PASSWORD'),
+            corsOrigin: self::required('APP_CORS_ORIGIN'),
         );
     }
 

@@ -12,10 +12,10 @@ final readonly class Response
     public function __construct(
         private array $data,
         private int $statusCode = 200,
-    ) {
-    }
+        private array $headers = [],
+    ) {}
 
-        /**
+    /**
      * @return array<string, mixed>
      */
     public function data(): array
@@ -33,6 +33,10 @@ final readonly class Response
         http_response_code($this->statusCode);
 
         header('Content-Type: application/json');
+
+        foreach ($this->headers as $name => $value) {
+            header(sprintf('%s: %s', $name, $value));
+        }
 
         echo json_encode(
             ['data' => $this->data],

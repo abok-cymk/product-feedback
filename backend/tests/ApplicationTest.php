@@ -233,4 +233,18 @@ final class ApplicationTest extends TestCase
             $response->data(),
         );
     }
+
+    public function test_it_returns_success_for_a_cors_preflight_request(): void
+    {
+        $application = new Application();
+
+        $response = $application->handle(
+            'OPTIONS',
+            '/api/products',
+            new Request(),
+        );
+
+        self::assertSame(204, $response->statusCode());
+        self::assertSame([], $response->data());
+    }
 }
