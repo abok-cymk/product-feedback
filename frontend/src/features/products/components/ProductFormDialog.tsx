@@ -20,24 +20,26 @@ export function ProductFormDialog({
   open,
   onOpenChange,
 }: ProductFormDialogProps) {
-  const { mutate } = useCreateProduct()
+  const { mutate, isPending } = useCreateProduct()
 
- const handleFormSubmit = (values: { name: string; description: string }) => {
+  const handleFormSubmit = (values: { name: string; description: string }) => {
     mutate(values, {
+      onSuccess: () => {
+        toast.success("Product added!")
+      },
       onError: () => {
-        toast.error("Failed to create product. Please Try again")
-      }
+        toast.error("Failed to create product. Please try again.")
+      },
     })
 
-    toast.success("Product added!")
     onOpenChange(false)
-  }  
+  }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button
           type="button"
-          className="cursor-pointer rounded-md px-4 py-2 text-sm font-medium mb-2"
+          className="mb-2 cursor-pointer rounded-md px-4 py-2 text-sm font-medium"
         >
           + Add Feedback
         </Button>
@@ -51,7 +53,7 @@ export function ProductFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <ProductForm onSubmit={handleFormSubmit} />
+        <ProductForm onSubmit={handleFormSubmit} isSubmitting={isPending} />
       </DialogContent>
     </Dialog>
   )

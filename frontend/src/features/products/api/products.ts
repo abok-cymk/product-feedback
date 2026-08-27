@@ -1,6 +1,6 @@
 import { apiFetch } from "../../../lib/api"
 import {
-  productSchema,
+  productResponseSchema,
   productsResponseSchema,
   type Product,
 } from "../schemas/product.ts"
@@ -13,14 +13,16 @@ export type CreateProductInput = {
 export async function createProduct(
   input: CreateProductInput
 ): Promise<Product> {
-  return apiFetch(
+  const response = await apiFetch(
     "/api/products",
     {
       method: "POST",
       body: JSON.stringify(input),
     },
-    (body) => productSchema.parse(body)
+    (body) => productResponseSchema.parse(body)
   )
+
+  return response.data
 }
 
 export async function getProducts(): Promise<Product[]> {

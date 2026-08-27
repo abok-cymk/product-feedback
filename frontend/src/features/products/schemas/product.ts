@@ -10,4 +10,8 @@ export const productsResponseSchema = z.object({
   data: z.array(productSchema),
 });
 
+export const productResponseSchema = z.object({
+  data: productSchema,
+});
+
 export type Product = z.infer<typeof productSchema>;
