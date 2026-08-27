@@ -1,5 +1,8 @@
 import { Link, Route, Routes } from "react-router"
+import { ProductList } from "./features/products/components/ProductList"
+import { ProductListSkeleton } from "./features/products/components/ProductListSkeleton"
 import { useProducts } from "./features/products/queries/product"
+import { Suspense } from "react"
 
 function HomePage() {
   return (
@@ -11,44 +14,25 @@ function HomePage() {
   )
 }
 
+function ProductsContent() {
+  const { data: products } = useProducts()
+
+  if (products.length === 0) {
+    return <p>No products found.</p>
+  }
+
+  return <ProductList products={products} />
+}
+
 function ProductsPage() {
-  const { data: products, isPending, isError } = useProducts()
-
-  if (isPending) {
-    return (
-      <main>
-        <h1>Products</h1>
-        <p>Loading products...</p>
-      </main>
-    )
-  }
-
-  if (isError) {
-    return (
-      <main>
-        <h1>Products</h1>
-        <p>Unable to load products.</p>
-      </main>
-    )
-  }
-
   return (
-    <main>
+    <main className="max-w-6xl mx-auto px-6 sm:px-3 md:px-4 lg:px-0 py-10 sm:py-5 md:py-4 lg:py-3">
       <h1>Products</h1>
-      {products.length === 0 ? (
-        <p>No products found.</p>
-      ) : (
-        <ul>
-          {products.map((product) => (
-            <li key={product.id}>
-              <h2>{product.name}</h2>
-              <p>{product.description}</p>
-            </li>
-          ))}
-        </ul>
-      )}
 
-      <Link to="/">Home</Link>
+      <Suspense fallback={<ProductListSkeleton />}>
+        <ProductsContent />
+      </Suspense>
+
       <Link to="/">Home</Link>
     </main>
   )

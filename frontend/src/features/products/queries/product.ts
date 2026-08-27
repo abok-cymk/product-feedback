@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { getProducts } from "../api/products";
 
@@ -8,7 +8,7 @@ export const productKeys = {
 };
 
 export function useProducts() {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: productKeys.lists(),
     queryFn: getProducts,
   });
